@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="eng">
+
+  <head>
+      <meta charset="utf-8">
+      <title>Blizzard : Matrix Calculator</title>
+  </head>
+
+  <body>
+      <h1>Matrix Calculator Web Application</h1>
+      <h4>Enter Matrix Dimensions</h4>
+
+      <form action="dimensions">
+          ROWS: <input type="number" id="rows">
+          COLUMNS: <input type="number" id="columns">
+          <input type="button" onclick="submitDimensions()" value="ENTER" id="matrixSizeEnterBtn">
+          <br>
+          <br>
+          <input type="button" value="ADD">
+          <input type="button" value="SUBTRACT">
+          <input type="button" value="DETERMINANT">
+          <input type="button" value="MULTIPLY">
+      </form>
+
+      <br>
+      <br>
+
+      <div id="matrixDisplay">
+
+      </div>
+
+
+  </body>
+  <script type="text/javascript" src="setup.js"></script>
+
+</html>
