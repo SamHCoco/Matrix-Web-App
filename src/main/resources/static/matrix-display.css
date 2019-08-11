@@ -1,0 +1,16 @@
+.operator-display {
+    font-size: 50px;
+}
+
+.matrix1-display {
+    position: relative;
+    top: 0px;
+}
+
+.matrix2-display {
+    float: right;
+}
+
+.elementInput {
+    width: 70px;
+}
