@@ -4,6 +4,7 @@
   <head>
       <meta charset="utf-8">
       <title>Blizzard : Matrix Calculator</title>
+      <link rel="stylesheet" href="matrix-display.css">
   </head>
 
   <body>
@@ -13,24 +14,30 @@
       <form action="dimensions">
           ROWS: <input type="number" id="rows">
           COLUMNS: <input type="number" id="columns">
-          <input type="button" onclick="submitDimensions()" value="ENTER" id="matrixSizeEnterBtn">
+          <input type="button" onclick="submitDimensions()" value="ENTER" id="enterBtn">
           <br>
           <br>
-          <input type="button" value="ADD">
-          <input type="button" value="SUBTRACT">
-          <input type="button" value="DETERMINANT">
-          <input type="button" value="MULTIPLY">
+          <input type="button" onclick="setOperator(this.id)" value="ADD" id="addBtn">
+          <input type="button" onclick="setOperator(this.id)" value="SUBTRACT" id="subtractBtn">
+          <input type="button" onclick="setOperator(this.id)" value="DETERMINANT" id="determinantBtn">
+          <input type="button" onclick="setOperator(this.id)" value="MULTIPLY" id="multiplyBtn">
+          <br>
+          <input type="button" value="GO" id="goButton">
+          <input type="button" onclick="clearScreen()" value="CLEAR" id="clearBtn">
       </form>
 
       <br>
       <br>
 
-      <div id="matrixDisplay">
+      <div id="matrixDisplay" class="display-region">
+          <div id="matrix1Display" class="matrix1-display"></div>
+          <div id="operatorDisplay" class="operator-display"></div>
+          <div id="matrix2Display" class="matrix2-display"></div>
 
       </div>
 
 
   </body>
-  <script type="text/javascript" src="setup.js"></script>
+  <script type="text/javascript" src="matrix.js"></script>
 
 </html>
