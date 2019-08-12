@@ -3,30 +3,29 @@ var isMatrix1Created = false; // whether matrix 1 has been initialized or not
 var isMatrix2Created = false; // whether matrix 2 has been initialized or not
 var isOperatorSet = false; // whether an operator has been selected or not
 var styleValue;
-var allButtonIds = ["addBtn", "subtractBtn", "multiplyBtn", "DeterminantBtn"];
+var allButtonIds = ["addBtn", "subtractBtn", "multiplyBtn", "determinantBtn"];
 
-// Function for user to submit dimensions of matrix on clicking 'Enter' button
-function submitDimensions() {
-    rows = document.getElementById('rows').value;
-    columns = document.getElementById('columns').value;
-    oldMatrix.push(rows);
-    oldMatrix.push(columns);
-    // creates matrix input prompt display
+function createMatrix() {
     var matrix;
+
+    if(){
+    }
+
     if(!isMatrix1Created){
         matrix = "matrix1";
     } else if(!isMatrix2Created){
         if(isOperatorSet){
             matrix = "matrix2";
-//            var matrix2Display = document.getElementById("matrix2Display");
-//            styleValue =  oldMatrix[1] * 120 + "px";
-//            matrix2Display.style.left = styleValue;
         } else {
             console.log("ERROR: A MATRIX OPERATOR MUST BE SELECTED");
         }
     }
     if(!isMatrix1Created || !isMatrix2Created && isOperatorSet){
         console.log(matrix + " BEING GENERATED"); // todo- remove this line
+        rows = document.getElementById('rows').value;
+        columns = document.getElementById('columns').value;
+        oldMatrix.push(rows);
+        oldMatrix.push(columns);
         var displayDiv = document.getElementById(matrix + "Display");
         for(var i = 1; i <= rows; i++){
             for(var j = 1; j <= columns; j++){
@@ -38,7 +37,7 @@ function submitDimensions() {
                displayDiv.appendChild(elementInput);
             }
             var nextLine = document.createElement('br');
-            nextLine.setAttribute('id', 'br' + i);
+            nextLine.setAttribute('id', matrix + 'br' + i);
             displayDiv.appendChild(nextLine);
         }
         if(!isMatrix1Created){
@@ -69,21 +68,21 @@ function setOperator(clickedOperatorId){
     } else if(clickedOperatorId == "determinantBtn"){
         if(!isMatrix1Created && !isMatrix2Created){
             operatorDisplay = document.createTextNode("DET");
-            var matrix1Display = document.getElementById("matrix1Display");
-            styleValue =  "115px";
-            matrix1Display.style.left = styleValue;
         }
     }
     isOperatorSet = true;
-    // creates 2nd matrix of same size as 1st, for add and subtract calculations
     if(clickedOperatorId == "addBtn" || clickedOperatorId == "subtractBtn"){
-        submitDimensions();
+        createMatrix();
     }
-    if(operatorDisplay != null){
-        document.getElementById("operatorDisplay").appendChild(operatorDisplay);
-        disableButtons(true, allButtonIds);
-    } else {
-        console.log("setOperator() ERROR: operatorDisplay is null"); //todo-remove this line
+    try{
+        if(operatorDisplay != null){
+            document.getElementById("operatorDisplay").appendChild(operatorDisplay);
+            disableButtons(true, allButtonIds);
+        } else {
+            console.log("setOperator() ERROR: operatorDisplay is null"); //todo-remove this line
+        }
+    } catch {
+        console.log("ERROR: setOperator() error");
     }
 }
 
@@ -103,10 +102,12 @@ function disableButtons(boolean, buttonIds){
 }
 
 function clearScreen(){
+    deleteOperator();
     deleteMatrix();
     deleteMatrix();
     document.getElementById("rows").value = "";
     document.getElementById("columns").value = "";
+    disableButtons(false, allButtonIds);
 }
 
 function deleteMatrix(){
@@ -137,11 +138,36 @@ function deleteMatrix(){
                 var child = document.getElementById(matrix + "e" + i + j);
                 display.removeChild(child);
             }
+            var brElement = document.getElementById(matrix + "br" + i);
+            display.removeChild(brElement);
         }
         if(matrix == "matrix2"){
             isMatrix2Created = false;
         } else if(matrix == "matrix1"){
             isMatrix1Created = false;
         }
+    }
+}
+
+function deleteOperator(){
+    try{
+        if(isOperatorSet && isMatrix1Created && !isMatrix2Created){
+            var operatorDisplay = document.getElementById("operatorDisplay");
+            operatorDisplay.innerHTML = "";
+            isOperatorSet = false;
+            return true;
+        } else {
+            return false;
+        }
+    } catch(err){
+        console.log("ERROR: deleteOperator() error");
+    }
+}
+
+function deleteButton(){
+    if(!deleteOperator()){
+        deleteMatrix();
+    } else {
+        disableButtons(false, allButtonIds);
     }
 }
