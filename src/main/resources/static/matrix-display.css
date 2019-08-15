@@ -1,12 +1,9 @@
-.operator-display {
-    font-size: 50px;
-    color: black;
+html {
+  background-image: url(abstract.png);
+  background-repeat: repeat-y;
+  background-size: cover;
 }
 
-
-.elementInput {
-    width: 70px;
-} 
 
 h1 {
   color: black;
@@ -15,6 +12,27 @@ h1 {
 body {
   color: white;
   font-family: "Segoe UI";
+}
+
+.controlPanel-display{
+  border-radius: 25px;
+  border: 2px solid white;
+  height: 265px;
+  width: 475px;
+  background-color: DodgerBlue;
+  padding-left: 16px;
+  font-weight: bold;
+}
+
+.sizeInput-display{
+  border-radius: 14px;
+  border: 1px solid black;
+  padding-top: 6px;
+  margin-top: 10px;
+  margin-left: 12px;
+  font-size: 22px;
+  font-weight: bold;
+  width: 90px;
 }
 
 .control-buttons{
@@ -31,6 +49,13 @@ body {
   background-color: DodgerBlue;
 }
 
+.control-buttons-div{
+    border: 2px solid white;
+    border-radius: 20px;
+    width: 370px;
+    height: 185px;
+}
+
 .display-region{
   border-radius: 25px;
   border: 1px solid black;
@@ -38,24 +63,29 @@ body {
   background-color: white;
 }
 
-.controlPanel-display{
-  border-radius: 25px;
-  border: 2px solid white;
-  height: 220px;
-  width: 600px;
-  background-color: DodgerBlue;
-  padding-left: 16px;
-  font-weight: bold;
+.matrix1-display{
+    padding-left: 10px;
+    padding-top: 5px;
+    display: inline-block;
 }
 
-.sizeInput-display{
-  padding-top: 6px;
-  margin-top: 10px;
-  margin-left: 7px;
+.matrix2-display{
+    display: inline-block;
 }
 
-html {
-  background-image: url(abstract.png);
-  background-repeat: repeat-y;
-  background-size: cover;
+.elementInput {
+    width: 60px;
+    height: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 4px 4px 4px 4px;
+}
+
+.operator-display {
+    font-size: 50px;
+    color: black;
+    display: inline-block;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-bottom: 10px;
 }
