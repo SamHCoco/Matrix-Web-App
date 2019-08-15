@@ -8,36 +8,35 @@
   </head>
 
   <body>
-      <h1>Matrix Calculator Web Application</h1>
-      <h4>USER INPUT</h4>
 
+      <h1>Matrix Calculator Web Application</h1>
       <form>
           <div class="controlPanel-display">
             ROWS <input type="number" id="rows" class="sizeInput-display">
             COLUMNS <input type="number" id="columns" class="sizeInput-display">
             <button type="button" onclick="createMatrix()" id="enterBtn" class="sizeInput-display">ENTER</button>
             <br>
-            <button type="button" onclick="setOperator(this.id)" id="addBtn" class="control-buttons">ADD<br>＋</button>
-            <button type="button" onclick="setOperator(this.id)" id="subtractBtn" class="control-buttons">SUB<br>－</button>
-            <button type="button" onclick="setOperator(this.id)" id="determinantBtn" class="control-buttons">DET<br>(M)</button>
-            <button type="button" onclick="setOperator(this.id)" id="multiplyBtn" class="control-buttons">PROD<br>×</button>
             <br>
-            <button type="button" id="goButton" class="control-buttons">GO!</button>
-            <button type="button" onclick="clearScreen()" id="clearBtn" class="control-buttons">CLR</button>
-              <button type="button" onclick="deleteButton()" id="delBtn" class="control-buttons">DEL</button>
+            <div class="control-buttons-div">
+                <button type="button" onclick="setOperator(this.id)" id="addBtn" class="control-buttons">ADD<br>＋</button>
+                <button type="button" onclick="setOperator(this.id)" id="subtractBtn" class="control-buttons">SUB<br>－</button>
+                <button type="button" onclick="setOperator(this.id)" id="determinantBtn" class="control-buttons">DET<br>(M)</button>
+                <button type="button" onclick="setOperator(this.id)" id="multiplyBtn" class="control-buttons">PROD<br>×</button>
+                <br>
+                <button type="button" id="goButton" class="control-buttons">GO!</button>
+                <button type="button" onclick="clearScreen()" id="clearBtn" class="control-buttons">CLR</button>
+                <button type="button" onclick="deleteButton()" id="delBtn" class="control-buttons">DEL</button>
+            </div>
           </div>
       </form>
-
       <br>
       <br>
-
       <div id="matrixDisplay" class="display-region">
           <div id="matrix1Display" class="matrix1-display"></div>
           <div id="operatorDisplay" class="operator-display"></div>
           <div id="matrix2Display" class="matrix2-display"></div>
       </div>
       <div id="resultDisplay" class="result-display"></div>
-
 
   </body>
   <script type="text/javascript" src="matrix_script.js"></script>
