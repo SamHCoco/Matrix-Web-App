@@ -3,6 +3,7 @@ var isMatrix1Created = false; // whether matrix 1 has been initialized or not
 var isMatrix2Created = false; // whether matrix 2 has been initialized or not
 var isOperatorSet = false; // whether an operator has been selected or not
 var allButtonIds = ["addBtn", "subtractBtn", "multiplyBtn", "determinantBtn"];
+var largestRows = null; // largest row of the 2 matrices inputted by user, to be used to optimize matrix display
 
 function createMatrix(){
     var matrix;
@@ -36,6 +37,7 @@ function createMatrix(){
     }
     if(!isMatrix1Created || !isMatrix2Created && isOperatorSet){
         console.log(matrix + " BEING GENERATED"); // todo- remove this line
+        optimizeDisplayRegion(rows);
         oldMatrix.push(rows);
         oldMatrix.push(columns);
         var displayDiv = document.getElementById(matrix + "Display");
@@ -104,6 +106,18 @@ function setOperator(clickedOperatorId){
     }
 }
 
+function optimizeDisplayRegion(matrixRows){
+    var displayRegion = document.getElementById("matrixDisplay");
+    if(largestRows == null){
+        largestRows = matrixRows;
+    } else {
+        if(matrixRows > largestRows){
+            largestRows = matrixRows;
+        }
+    }
+    displayRegion.style.height = (60 * largestRows) + "px";
+}
+
 function disableButtons(boolean, buttonIds){
     console.log("disableButtons() - EXECUTING"); // todo-remove
     var i = 0;
@@ -115,7 +129,7 @@ function disableButtons(boolean, buttonIds){
             console.log(buttonIds[i] + " DISABLED"); // todo-remove
         } else if(boolean == false){
             button.disabled = false;
-            button.style.borderColor = "white";
+            button.style.backgroundColor = "DodgerBlue";
             console.log(buttonIds[i] + " ENABLED"); // todo-remove
         }
         i++;
@@ -123,12 +137,12 @@ function disableButtons(boolean, buttonIds){
 }
 
 function clearScreen(){
-    deleteOperator();
-    deleteMatrix();
-    deleteMatrix();
+    deleteButton();
+    deleteButton();
+    deleteButton();
     document.getElementById("rows").value = "";
     document.getElementById("columns").value = "";
-    disableButtons(false, allButtonIds);
+    largestRows = null;
 }
 
 function deleteMatrix(){
@@ -162,6 +176,7 @@ function deleteMatrix(){
             var brElement = document.getElementById(matrix + "br" + i);
             display.removeChild(brElement);
         }
+        // sets variable back to default value
         if(matrix == "matrix2"){
             isMatrix2Created = false;
         } else if(matrix == "matrix1"){
@@ -190,5 +205,13 @@ function deleteButton(){
         deleteMatrix();
     } else {
         disableButtons(false, allButtonIds);
+    }
+    resetDisplay();
+}
+
+function resetDisplay(){
+    if(!isMatrix1Created && !isMatrix2Created){
+        var displayRegion = document.getElementById("matrixDisplay");
+        displayRegion.style.height = "200px";
     }
 }
