@@ -45,7 +45,8 @@ function createMatrix(){
             for(var j = 1; j <= columns; j++){
                var elementInput = document.createElement('input');
                elementInput.setAttribute('type', 'number');
-               elementInput.setAttribute('id', matrix + "e" + i + j);
+               elementInput.setAttribute('id', matrix + 'e' + i + j);
+               elementInput.setAttribute('name', matrix + 'e' + i + j);
                elementInput.setAttribute('class', 'elementInput');
                elementInput.setAttribute('min', '1');
                displayDiv.appendChild(elementInput);
@@ -148,7 +149,7 @@ function clearScreen(){
 function deleteMatrix(){
     var matrix;
     var rows;
-    var columns;
+    var columns; vv
     var display;
 
     if(isMatrix1Created || isMatrix2Created){
