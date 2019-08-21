@@ -5,6 +5,7 @@ var isOperatorSet = false; // whether an operator has been selected or not
 var allButtonIds = ["addBtn", "subtractBtn", "multiplyBtn", "determinantBtn"];
 var largestRows = null; // largest row of the 2 matrices inputted by user, to be used to optimize matrix display
 
+
 function createMatrix(){
     var matrix;
     var rows = document.getElementById('rows').value;
@@ -14,6 +15,7 @@ function createMatrix(){
         console.log("ERROR: createMatrix() INPUT CANNOT BE EMPTY");
         return null;
     }
+
     try{
         rows = parseInt(rows);
         columns = parseInt(columns);
@@ -26,6 +28,7 @@ function createMatrix(){
     } catch(err){
         console.log("ERROR: createMatrix() COULD NOT PARSE INPUT AS INT");
     }
+
     if(!isMatrix1Created){
         matrix = "matrix1";
     } else if(!isMatrix2Created){
@@ -35,6 +38,7 @@ function createMatrix(){
             console.log("ERROR: A MATRIX OPERATOR MUST BE SELECTED");
         }
     }
+
     if(!isMatrix1Created || !isMatrix2Created && isOperatorSet){
         console.log(matrix + " BEING GENERATED"); // todo- remove this line
         optimizeDisplayRegion(rows);
@@ -83,6 +87,7 @@ function setOperator(clickedOperatorId){
             operatorDisplay = document.createTextNode("DET");
         }
     }
+
     try{
         if(operatorDisplay != null){
             document.getElementById("operatorDisplay").appendChild(operatorDisplay);
@@ -102,6 +107,7 @@ function setOperator(clickedOperatorId){
     } catch {
         console.log("ERROR: setOperator() error");
     }
+
     if(clickedOperatorId == "addBtn" || clickedOperatorId == "subtractBtn"){
             createMatrix();
     }
@@ -216,3 +222,43 @@ function resetDisplay(){
         displayRegion.style.height = "200px";
     }
 }
+
+function validateSubmit(){
+    if(isOperatorSet && isMatrix1Created && isMatrix2Created){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+$(function (){
+    $("#goBtn").on("click", function(event){
+        event.preventDefault();
+        console.log("Ajax() EXECUTED"); // REMOVE
+        console.log(oldMatrix); // REMOVE
+
+        var size = {
+          matrix1Rows : oldMatrix[0],
+          matrix1Columns: oldMatrix[1],
+          matrix2Rows: oldMatrix[2],
+          matrix2Columns: oldMatrix[3],
+        };
+
+        $.ajax({
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          type: "POST",
+          url: "",
+          dataType: "json",
+          data: JSON.stringify(size) ,
+          success: function(){
+            console.log("AJAX SUCCESS");
+          },
+          error: function(){
+            console.log("AJAX error!");
+          }
+        });
+    });
+});
