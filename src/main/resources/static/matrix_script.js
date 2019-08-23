@@ -232,6 +232,7 @@ function validateSubmit(){
 }
 
 $(function (){
+    // todo - send matrix values to server
     $("#goBtn").on("click", function(event){
         event.preventDefault();
         console.log("Ajax() EXECUTED"); // REMOVE
@@ -244,6 +245,7 @@ $(function (){
           matrix2Columns: oldMatrix[3],
         };
 
+        };
         $.ajax({
           headers: {
             "Accept": "application/json",
