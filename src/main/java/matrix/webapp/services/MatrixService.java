@@ -2,7 +2,7 @@ package matrix.webapp.services;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
+// todo - alter class for use in web application
 public final class MatrixService {
 
     private int rows; // user input for number of rows
