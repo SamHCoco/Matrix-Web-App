@@ -10,7 +10,10 @@
   <body>
 
       <h1>Matrix Calculator Web Application</h1>
-      <form method="post">
+      <!-- onSubmit = return false stops the submission -->
+      <!-- onSubmit can be used for validation e.g. onSubmit = return validation() -->
+      <!--function validation(){ return if ... false otherwise} -->
+      <form method="post"onsubmit="return validateSubmit()">
           <div class="controlPanel-display">
             ROWS <input type="number" id="rows" class="sizeInput-display">
             COLUMNS <input type="number" id="columns" class="sizeInput-display">
@@ -23,7 +26,7 @@
                 <button type="button" onclick="setOperator(this.id)" id="determinantBtn" class="control-buttons">DET<br>(M)</button>
                 <button type="button" onclick="setOperator(this.id)" id="multiplyBtn" class="control-buttons">PROD<br>×</button>
                 <br>
-                <button type="submit" id="goButton" class="control-buttons">GO!</button>
+                <button type="submit" id="goBtn" class="control-buttons">GO!</button>
                 <button type="button" onclick="clearScreen()" id="clearBtn" class="control-buttons">CLR</button>
                 <button type="button" onclick="deleteButton()" id="delBtn" class="control-buttons">DEL</button>
             </div>
@@ -38,8 +41,8 @@
           <div id="resultDisplay" class="result-display"></div>
       </form>
 
-
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script type="text/javascript" src="matrix_script.js"></script>
   </body>
-  <script type="text/javascript" src="matrix_script.js"></script>
 
 </html>
