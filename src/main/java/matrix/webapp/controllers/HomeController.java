@@ -1,9 +1,10 @@
 package matrix.webapp.controllers;
 
+import matrix.webapp.models.MatrixSizeModel;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HomeController {
@@ -14,10 +15,8 @@ public class HomeController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public String getMatrixValues(@RequestParam String matrix1e11){
-        System.out.println(matrix1e11);
+    public String executeCalculation(@RequestBody MatrixSizeModel size){
+        // calculation controller
         return "index";
     }
-
 }
-
