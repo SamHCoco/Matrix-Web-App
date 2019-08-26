@@ -1,5 +1,7 @@
 package matrix.webapp.models;
 
+import matrix.webapp.Constant;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -7,10 +9,7 @@ public class MatrixModel {
 
     public static ArrayList<Double[][]> extractMatrices(Map<String, String> data){
         ArrayList<Double[][]> result = new ArrayList<>();
-        final String MATRIX_1_ROWS = "matrix1Rows";
-        final String MATRIX_1_COLUMNS = "matrix1Columns";
-        final String MATRIX_2_ROWS = "matrix2Rows";
-        final String MATRIX_2_COLUMNS = "matrix2Columns";
+
         Double[][] matrix1 = null;
         Double[][] matrix2 = null;
         Integer matrix1Rows = null;
@@ -20,25 +19,25 @@ public class MatrixModel {
         String operator = data.get("operator");
 
         if(operator.equals("+") || operator.equals("-")){
-            matrix1Rows = Integer.valueOf(data.get(MATRIX_1_ROWS));
-            matrix1Columns = Integer.valueOf(data.get(MATRIX_1_COLUMNS));
+            matrix1Rows = Integer.valueOf(data.get(Constant.MATRIX_1_ROWS));
+            matrix1Columns = Integer.valueOf(data.get(Constant.MATRIX_1_COLUMNS));
             matrix2Rows = matrix1Rows;
             matrix2Columns = matrix1Rows;
             matrix1 = new Double[matrix1Rows][matrix1Columns];
             matrix2 = new Double[matrix1Rows][matrix1Columns];
 
         } else if(operator.equals("det")){
-            matrix1Rows = Integer.valueOf(data.get(MATRIX_1_ROWS));
-            matrix1Columns = Integer.valueOf(data.get(MATRIX_1_COLUMNS));
+            matrix1Rows = Integer.valueOf(data.get(Constant.MATRIX_1_ROWS));
+            matrix1Columns = Integer.valueOf(data.get(Constant.MATRIX_1_COLUMNS));
             matrix1 = new Double[matrix1Rows][matrix1Columns];
 
         } else if(operator.equals("x")){
-            matrix1Rows = Integer.valueOf(data.get(MATRIX_1_ROWS));
-            matrix1Columns = Integer.valueOf(data.get(MATRIX_1_COLUMNS));
+            matrix1Rows = Integer.valueOf(data.get(Constant.MATRIX_1_ROWS));
+            matrix1Columns = Integer.valueOf(data.get(Constant.MATRIX_1_COLUMNS));
             matrix1 = new Double[matrix1Rows][matrix1Columns];
 
-            matrix2Rows = Integer.valueOf(data.get(MATRIX_2_ROWS));
-            matrix2Columns = Integer.valueOf(data.get(MATRIX_2_COLUMNS));
+            matrix2Rows = Integer.valueOf(data.get(Constant.MATRIX_2_ROWS));
+            matrix2Columns = Integer.valueOf(data.get(Constant.MATRIX_2_COLUMNS));
             matrix2 = new Double[matrix2Rows][matrix2Columns];
         }
 
