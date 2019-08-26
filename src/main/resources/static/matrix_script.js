@@ -4,6 +4,7 @@ var isMatrix2Created = false; // whether matrix 2 has been initialized or not
 var isOperatorSet = false; // whether an operator has been selected or not
 var allButtonIds = ["addBtn", "subtractBtn", "multiplyBtn", "determinantBtn"];
 var largestRows = null; // largest row of the 2 matrices inputted by user, to be used to optimize matrix display
+var operator = null; // stores operator
 
 
 function createMatrix(){
@@ -73,18 +74,22 @@ function setOperator(clickedOperatorId){
     if(clickedOperatorId == "addBtn"){
         if(isMatrix1Created && !isMatrix2Created){
             operatorDisplay = document.createTextNode("+");
+            operator = "+";
         }
     } else if(clickedOperatorId == "subtractBtn"){
         if(isMatrix1Created && !isMatrix2Created){
             operatorDisplay = document.createTextNode("-");
+            operator = "-";
         }
     } else if(clickedOperatorId == "multiplyBtn"){
         if(isMatrix1Created){
             operatorDisplay = document.createTextNode("x");
+            operator = "x";
         }
     } else if(clickedOperatorId == "determinantBtn"){
         if(!isMatrix1Created && !isMatrix2Created){
             operatorDisplay = document.createTextNode("DET");
+            operator = "det";
         }
     }
 
@@ -197,6 +202,7 @@ function deleteOperator(){
         if(isOperatorSet && isMatrix1Created && !isMatrix2Created){
             var operatorDisplay = document.getElementById("operatorDisplay");
             operatorDisplay.innerHTML = "";
+            operator = null;
             isOperatorSet = false;
             return true;
         } else {
@@ -232,20 +238,33 @@ function validateSubmit(){
 }
 
 $(function (){
-    // todo - send matrix values to server
     $("#goBtn").on("click", function(event){
         event.preventDefault();
-        console.log("Ajax() EXECUTED"); // REMOVE
-        console.log(oldMatrix); // REMOVE
-
-        var size = {
+        console.log("Ajax() EXECUTED"); // todo - REMOVE
+        var data = {
+          operator : operator,
           matrix1Rows : oldMatrix[0],
           matrix1Columns: oldMatrix[1],
           matrix2Rows: oldMatrix[2],
-          matrix2Columns: oldMatrix[3],
+          matrix2Columns: oldMatrix[3]
         };
+        var counter = 0;
+        if(isMatrix2Created && isMatrix1Created){
+            counter = 2;
+        } else if(isMatrix1Created && !isMatrix2Created){
+            counter = 1;
+        }
+        var i = 1;
+        while(i <= counter){
+            for(var j = 1; j <= oldMatrix[2*i-2]; j++){
+                for(var k = 1; k <= oldMatrix[2*i-1]; k++){
+                    data["matrix" + i + "e" + j + k] = $("#matrix" + i + "e" + j + k).val();
+                    console.log("matrix" + i + "e" + j + k + " = " +  data["matrix" + i + "e" + j + k]); // todo-REMOVE
+                }
+            }
+            i++;
+        }
 
-        };
         $.ajax({
           headers: {
             "Accept": "application/json",
@@ -254,7 +273,7 @@ $(function (){
           type: "POST",
           url: "",
           dataType: "json",
-          data: JSON.stringify(size) ,
+          data: JSON.stringify(data) ,
           success: function(){
             console.log("AJAX SUCCESS");
           },
