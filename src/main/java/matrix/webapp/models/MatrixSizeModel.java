@@ -1,41 +1,35 @@
 package matrix.webapp.models;
 
+import matrix.webapp.Constant;
+
+import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.util.Map;
+
 public class MatrixSizeModel {
 
-    private int matrix1Rows;
-    private int matrix1Columns;
-    private int matrix2Rows;
-    private int matrix2Columns;
-
-    public void setMatrix1Rows(int matrix1Rows){
-        this.matrix1Rows = matrix1Rows;
+    public static HashMap<String, Integer> getDimensions(Map<String, String> data){
+        HashMap<String, Integer> dimensions = new HashMap<>();
+        if(!data.containsKey(Constant.MATRIX_2_ROWS) && !data.containsKey(Constant.MATRIX_2_COLUMNS)){
+            dimensions.put(Constant.MATRIX_1_ROWS, convertInt(data.get(Constant.MATRIX_1_ROWS)));
+            dimensions.put(Constant.MATRIX_1_COLUMNS, convertInt(data.get(Constant.MATRIX_1_COLUMNS)));
+        } else {
+            dimensions.put(Constant.MATRIX_1_ROWS, convertInt(data.get(Constant.MATRIX_1_ROWS)));
+            dimensions.put(Constant.MATRIX_1_COLUMNS, convertInt(data.get(Constant.MATRIX_1_COLUMNS)));
+            dimensions.put(Constant.MATRIX_2_ROWS, convertInt(data.get(Constant.MATRIX_2_ROWS)));
+            dimensions.put(Constant.MATRIX_2_COLUMNS, convertInt(data.get(Constant.MATRIX_2_COLUMNS)));
+        }
+        return dimensions;
     }
 
-    public void setMatrix2Rows(int matrix2Rows){
-        this.matrix2Rows = matrix2Rows;
+    private static int convertInt(String value){
+        int result = 0;
+        try{
+            result = Integer.valueOf(value);
+        }catch(InputMismatchException e){
+            System.out.println("convertToInt() ERROR: " + value + " is not an integer");
+        }
+        return result;
     }
 
-    public void setMatrix1Columns(int matrix1Columns){
-        this.matrix1Columns = matrix1Columns;
-    }
-
-    public void setMatrix2Columns(int matrix2Columns){
-        this.matrix2Columns = matrix2Columns;
-    }
-
-    public int getMatrix1Rows(){
-        return matrix1Rows;
-    }
-
-    public int getMatrix2Rows(){
-        return matrix2Rows;
-    }
-
-    public int getMatrix1Columns(){
-        return matrix1Columns;
-    }
-
-    public int getMatrix2Columns(){
-        return matrix2Columns;
-    }
 }
