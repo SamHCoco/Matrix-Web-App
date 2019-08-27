@@ -1,8 +1,10 @@
 package matrix.webapp.models;
 
 import matrix.webapp.Constant;
+import matrix.webapp.services.MatrixService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MatrixModel {
@@ -22,7 +24,7 @@ public class MatrixModel {
             matrix1Rows = Integer.valueOf(data.get(Constant.MATRIX_1_ROWS));
             matrix1Columns = Integer.valueOf(data.get(Constant.MATRIX_1_COLUMNS));
             matrix2Rows = matrix1Rows;
-            matrix2Columns = matrix1Rows;
+            matrix2Columns = matrix1Columns;
             matrix1 = new Double[matrix1Rows][matrix1Columns];
             matrix2 = new Double[matrix1Rows][matrix1Columns];
 
@@ -65,4 +67,16 @@ public class MatrixModel {
         System.out.println("\n\nDATA SERVICE COMPLETE! \n\n"); // todo-REMOVE
         return result;
     }
+
+    public static Map<String, String> convertArrayToMap(MatrixService matrix){
+        Map<String, String> result = new HashMap<>();
+        double[][] matrixElements = matrix.getMatrix();
+        for(int i = 0; i < matrix.getRows(); i++){
+            for(int j = 0; j < matrix.getColumns(); j++){
+                result.put("resulte" + (i + 1 )+ (j + 1), String.valueOf(matrixElements[i][j]));
+            }
+        }
+        return result;
+    }
+
 }
