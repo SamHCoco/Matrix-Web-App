@@ -1,8 +1,9 @@
 package matrix.webapp.services;
 
+// todo - alter class for use in web application
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-// todo - alter class for use in web application
+
 public final class MatrixService {
 
     private int rows; // user input for number of rows
@@ -44,16 +45,28 @@ public final class MatrixService {
      */
     public void setMatrix(double[][] m){
         matrix = m;
-        System.out.println("MATRIX " + name + ":");
+        System.out.println(name + ":");
         printMatrix();
+    }
+
+    public int getRows(){
+        return rows;
+    }
+
+    public int getColumns(){
+        return columns;
+    }
+
+    public double[][] getMatrix(){
+        return matrix;
     }
 
     /**
      * Prints the user inputted matrix, with every element rounded to 3 d.p.
      */
     public void printMatrix(){
-        for(int i = 0; i < matrix.length; i++){
-            for(int j = 0; j < matrix[rows - 1].length; j++){ // [rows - 1] since index starts at 0
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < columns; j++){ // [rows - 1] since index starts at 0
                 System.out.printf("%8.3f",matrix[i][j]);
             }
             System.out.println();
@@ -67,10 +80,10 @@ public final class MatrixService {
     public double[][] addMatrix(MatrixService x){
         double[][] addedMatrix; // final result
         if(x.rows == rows && x.columns == columns){
-            addedMatrix = new double[matrix.length][matrix.length];
+            addedMatrix = new double[rows][columns];
 
-            for(int i = 0; i < matrix.length; i++){
-                for(int j = 0; j < matrix.length; j++){
+            for(int i = 0; i < rows; i++){
+                for(int j = 0; j < columns; j++){
                     addedMatrix[i][j] = formatTo3DP(x.matrix[i][j] + matrix[i][j]);
                 }
             }
@@ -90,15 +103,16 @@ public final class MatrixService {
      */
     public double[][] subtractMatrix(MatrixService x){
         if(x.rows == rows && x.columns == columns){
-            double[][] subtractedMatrix  = new double[matrix.length][matrix.length];
+            double[][] subtractedMatrix  = new double[rows][columns];
 
-            for(int i = 0; i < x.matrix.length; i++){
-                for(int j = 0; j < x.matrix.length; j++){
-                    subtractedMatrix[i][j] = formatTo3DP(x.matrix[i][j] - matrix[i][j]);
+            for(int i = 0; i < rows; i++){
+                for(int j = 0; j < columns; j++){
+                    subtractedMatrix[i][j] = formatTo3DP( matrix[i][j] - x.matrix[i][j]);
                 }
             }
-            System.out.println("SUBTRACTION RESULT: " + x.name + " - " + name);
+            System.out.println("SUBTRACTED MATRIX: " + name + " - " + x.name);
             matrix = subtractedMatrix;
+            printMatrix();
             return matrix;
         } else {
             System.out.println("SUBTRACTION ERROR: Matrix " + name + " and " + x.name + " must be the same size.");
@@ -237,7 +251,7 @@ public final class MatrixService {
             for(int i = 0; i < matrix.length - 1; i++ ){
                 for(int j = 0; j < matrix.length - 1; j++){
                     if(iteration == 1){
-                       extractedMatrix[i][j] = matrix[i+1][j+1];
+                        extractedMatrix[i][j] = matrix[i+1][j+1];
                     }else if(iteration == 2){
                         if(j == 1){
                             extractedMatrix[i][j] = matrix[i+1][j+1];
@@ -252,7 +266,7 @@ public final class MatrixService {
             cofactorMatrices.add(extractedMatrix);
             iteration++;
         } while(iteration <= 3 );
-    return cofactorMatrices;
+        return cofactorMatrices;
     }
 
     /**
