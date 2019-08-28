@@ -75,7 +75,7 @@ public final class MatrixService {
 
     /**
      * Adds two matrices and prints the result to the console.
-     * @param x NxN (N >= 1) matrix to be added to matrix (NxN)
+     * @param x The matrix to add to the current matrix (M + x)
      */
     public double[][] addMatrix(MatrixService x){
         double[][] addedMatrix; // final result
@@ -99,7 +99,7 @@ public final class MatrixService {
 
     /**
      * Subtracts two matrices and prints the result to the console.
-     * @param x NxN (N >= 1) matrix to be subtracted from matrix (NxN)
+     * @param x The matrix to subtract from the current matrix (M - x)
      */
     public double[][] subtractMatrix(MatrixService x){
         if(x.rows == rows && x.columns == columns){
