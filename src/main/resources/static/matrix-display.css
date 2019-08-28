@@ -59,7 +59,7 @@ body {
 .display-region{
   border-radius: 25px;
   border: 1px solid black;
-  height: 200px;
+  height: 150px;
   background-color: white;
 }
 
@@ -73,6 +73,26 @@ body {
     display: inline-block;
 }
 
+.equals-display{
+    display: inline-block;
+    font-size: 50px;
+    color: black;
+}
+
+.result-display{
+    display: inline-block;
+    color: black;
+}
+
+.resultInput{
+    display: inline-block;
+    width: 60px;
+    height: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 4px 4px 4px 4px;
+}
+
 .elementInput {
     width: 60px;
     height: 40px;
@@ -81,7 +101,7 @@ body {
     margin: 4px 4px 4px 4px;
 }
 
-.operator-display {
+.operator-display{
     font-size: 50px;
     color: black;
     display: inline-block;
@@ -89,3 +109,4 @@ body {
     padding-right: 7px;
     padding-bottom: 10px;
 }
+
