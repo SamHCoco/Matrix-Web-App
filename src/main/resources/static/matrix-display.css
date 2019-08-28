@@ -84,13 +84,15 @@ body {
     color: black;
 }
 
-.resultInput{
+.result-input{
     display: inline-block;
     width: 60px;
     height: 40px;
     font-size: 18px;
     font-weight: bold;
     margin: 4px 4px 4px 4px;
+    border: 1px solid black;
+    color: black;
 }
 
 .elementInput {
@@ -99,6 +101,7 @@ body {
     font-size: 18px;
     font-weight: bold;
     margin: 4px 4px 4px 4px;
+    border: 1px solid black;
 }
 
 .operator-display{
