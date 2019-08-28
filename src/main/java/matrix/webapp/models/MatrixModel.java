@@ -64,13 +64,14 @@ public class MatrixModel {
             }
             i++;
         }
-        System.out.println("\n\nDATA SERVICE COMPLETE! \n\n"); // todo-REMOVE
         return result;
     }
 
     public static Map<String, String> convertArrayToMap(MatrixService matrix){
         Map<String, String> result = new HashMap<>();
         double[][] matrixElements = matrix.getMatrix();
+        result.put("resultRows", String.valueOf(matrix.getRows()));
+        result.put("resultColumns", String.valueOf(matrix.getColumns()));
         for(int i = 0; i < matrix.getRows(); i++){
             for(int j = 0; j < matrix.getColumns(); j++){
                 result.put("resulte" + (i + 1 )+ (j + 1), String.valueOf(matrixElements[i][j]));
