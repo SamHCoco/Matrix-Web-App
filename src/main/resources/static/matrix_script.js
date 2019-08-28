@@ -6,7 +6,6 @@ var allButtonIds = ["addBtn", "subtractBtn", "multiplyBtn", "determinantBtn"];
 var largestRows = null; // largest row of the 2 matrices inputted by user, to be used to optimize matrix display
 var operator = null; // stores operator
 
-
 function createMatrix(){
     var matrix;
     var rows = document.getElementById('rows').value;
@@ -127,22 +126,19 @@ function optimizeDisplayRegion(matrixRows){
             largestRows = matrixRows;
         }
     }
-    displayRegion.style.height = (60 * largestRows) + "px";
+    displayRegion.style.height = (80 * largestRows) + "px";
 }
 
 function disableButtons(boolean, buttonIds){
-    console.log("disableButtons() - EXECUTING"); // todo-remove
     var i = 0;
     while(i < buttonIds.length){
         var button = document.getElementById(buttonIds[i]);
         if(boolean == true){
             button.disabled = true;
             button.style.backgroundColor = "silver";
-            console.log(buttonIds[i] + " DISABLED"); // todo-remove
         } else if(boolean == false){
             button.disabled = false;
             button.style.backgroundColor = "DodgerBlue";
-            console.log(buttonIds[i] + " ENABLED"); // todo-remove
         }
         i++;
     }
@@ -160,7 +156,7 @@ function clearScreen(){
 function deleteMatrix(){
     var matrix;
     var rows;
-    var columns; vv
+    var columns;
     var display;
 
     if(isMatrix1Created || isMatrix2Created){
@@ -229,57 +225,78 @@ function resetDisplay(){
     }
 }
 
-function validateSubmit(){
-    if(isOperatorSet && isMatrix1Created && isMatrix2Created){
-        return true;
-    } else {
-        return false;
+// Displays results from server to the screen
+function displayResult(result){
+    var resultDisplayDiv = document.getElementById("resultDisplay");
+    document.getElementById("equalsDisplay").innerHTML = "=";
+    var rows = result["resultRows"]; // todo - REMOVE
+    console.log("resultRows: " + result["resultRows"]); // todo - REMOVE
+    var columns = result["resultColumns"]; // todo - REMOVE
+    console.log("resultColumns: " + result["resultColumns"]); // todo - REMOVE
+    for(var i = 1; i <= rows; i++){
+        for(var j = 1; j <= columns; j++){
+            var resultElement = document.createElement('input');
+            resultElement.setAttribute('class', 'resultInput');
+            resultElement.setAttribute('value', result["resulte" + i + j]);
+            resultElement.setAttribute('disabled', true);
+            resultDisplayDiv.appendChild(resultElement);
+        }
+        var nextLine = document.createElement('br');
+        nextLine.setAttribute('id', 'resultMatrixBr' + i);
+        resultDisplayDiv.appendChild(nextLine);
     }
 }
 
 $(function (){
     $("#goBtn").on("click", function(event){
-        event.preventDefault();
-        console.log("Ajax() EXECUTED"); // todo - REMOVE
-        var data = {
-          operator : operator,
-          matrix1Rows : oldMatrix[0],
-          matrix1Columns: oldMatrix[1],
-          matrix2Rows: oldMatrix[2],
-          matrix2Columns: oldMatrix[3]
-        };
-        var counter = 0;
-        if(isMatrix2Created && isMatrix1Created){
-            counter = 2;
-        } else if(isMatrix1Created && !isMatrix2Created){
-            counter = 1;
-        }
-        var i = 1;
-        while(i <= counter){
-            for(var j = 1; j <= oldMatrix[2*i-2]; j++){
-                for(var k = 1; k <= oldMatrix[2*i-1]; k++){
-                    data["matrix" + i + "e" + j + k] = $("#matrix" + i + "e" + j + k).val();
-                    console.log("matrix" + i + "e" + j + k + " = " +  data["matrix" + i + "e" + j + k]); // todo-REMOVE
-                }
+        if(isMatrix1Created && isMatrix2Created && isOperatorSet || isMatrix1Created && operator == "det"){
+            event.preventDefault();
+            console.log("Ajax() EXECUTED"); // todo - REMOVE
+            var data = {
+              operator : operator,
+              matrix1Rows : oldMatrix[0],
+              matrix1Columns: oldMatrix[1],
+              matrix2Rows: oldMatrix[2],
+              matrix2Columns: oldMatrix[3]
+            };
+            var counter = 0;
+            if(isMatrix2Created && isMatrix1Created){
+                counter = 2;
+            } else if(isMatrix1Created && !isMatrix2Created){
+                counter = 1;
             }
-            i++;
-        }
+            var i = 1;
+            while(i <= counter){
+                for(var j = 1; j <= oldMatrix[2*i-2]; j++){
+                    for(var k = 1; k <= oldMatrix[2*i-1]; k++){
+                        data["matrix" + i + "e" + j + k] = $("#matrix" + i + "e" + j + k).val();
+                        console.log("matrix" + i + "e" + j + k + " = " +  data["matrix" + i + "e" + j + k]); // todo-REMOVE
+                    }
+                }
+                i++;
+            }
 
-        $.ajax({
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          },
-          type: "POST",
-          url: "",
-          dataType: "json",
-          data: JSON.stringify(data) ,
-          success: function(){
-            console.log("AJAX SUCCESS");
-          },
-          error: function(){
-            console.log("AJAX error!");
-          }
-        });
+            $.ajax({
+              headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+              },
+              type: "POST",
+              url: "",
+              dataType: "json",
+              data: JSON.stringify(data) ,
+              success: function(resultData){
+                console.log("AJAX SUCCESS"); //todo - REMOVE
+                var receivedData = JSON.parse(JSON.stringify(resultData));
+                console.log("RESULT: " + receivedData); // todo - REMOVE
+                displayResult(receivedData);
+              },
+              error: function(){
+                console.log("AJAX error!");
+              }
+            });
+        } else {
+            console.log("GO! ERROR: NO CALCULATION VALUES GIVEN!"); // todo - REMOVE
+        }
     });
 });
