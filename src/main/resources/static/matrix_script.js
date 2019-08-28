@@ -1,6 +1,7 @@
 var oldMatrix = []; // the size of the previous inputted matrix to be deleted
 var isMatrix1Created = false; // whether matrix 1 has been initialized or not
 var isMatrix2Created = false; // whether matrix 2 has been initialized or not
+var isMatrix3Created = false; // whether matrix 3 (the result matrix) has been initialised
 var isOperatorSet = false; // whether an operator has been selected or not
 var allButtonIds = ["addBtn", "subtractBtn", "multiplyBtn", "determinantBtn"];
 var largestRows = null; // largest row of the 2 matrices inputted by user, to be used to optimize matrix display
@@ -111,9 +112,10 @@ function setOperator(clickedOperatorId){
     } catch {
         console.log("ERROR: setOperator() error");
     }
-
     if(clickedOperatorId == "addBtn" || clickedOperatorId == "subtractBtn"){
+        if(isMatrix1Created){
             createMatrix();
+        }
     }
 }
 
@@ -148,6 +150,7 @@ function clearScreen(){
     deleteButton();
     deleteButton();
     deleteButton();
+    deleteButton();
     document.getElementById("rows").value = "";
     document.getElementById("columns").value = "";
     largestRows = null;
@@ -159,14 +162,19 @@ function deleteMatrix(){
     var columns;
     var display;
 
-    if(isMatrix1Created || isMatrix2Created){
-        if(isMatrix2Created){
+    if(isMatrix1Created || isMatrix2Created || isMatrix3Created){
+        if(isMatrix3Created){
+            matrix = "matrix3";
+        } else if(isMatrix2Created){
             matrix = "matrix2";
         } else if(isMatrix1Created){
             matrix = "matrix1";
         }
         display = document.getElementById(matrix + "Display");
-        if(display.id == "matrix2Display"){
+        if(display.id == "matrix3Display"){
+            rows = oldMatrix[4];
+            columns = oldMatrix[5];
+        } else if(display.id == "matrix2Display"){
           rows = oldMatrix[2];
           columns = oldMatrix[3];
         } else if(display.id == "matrix1Display"){
@@ -185,7 +193,10 @@ function deleteMatrix(){
             display.removeChild(brElement);
         }
         // sets variable back to default value
-        if(matrix == "matrix2"){
+        if(matrix == "matrix3"){
+            isMatrix3Created = false;
+            document.getElementById("equalsDisplay").innerHTML = "";
+        } else if(matrix == "matrix2"){
             isMatrix2Created = false;
         } else if(matrix == "matrix1"){
             isMatrix1Created = false;
@@ -221,30 +232,32 @@ function deleteButton(){
 function resetDisplay(){
     if(!isMatrix1Created && !isMatrix2Created){
         var displayRegion = document.getElementById("matrixDisplay");
-        displayRegion.style.height = "200px";
+        displayRegion.style.height = "150px";
     }
 }
 
 // Displays results from server to the screen
 function displayResult(result){
-    var resultDisplayDiv = document.getElementById("resultDisplay");
+    var matrix3Display = document.getElementById("matrix3Display");
     document.getElementById("equalsDisplay").innerHTML = "=";
-    var rows = result["resultRows"]; // todo - REMOVE
-    console.log("resultRows: " + result["resultRows"]); // todo - REMOVE
-    var columns = result["resultColumns"]; // todo - REMOVE
-    console.log("resultColumns: " + result["resultColumns"]); // todo - REMOVE
+    var rows = result["resultRows"];
+    var columns = result["resultColumns"];
+    oldMatrix.push(rows);
+    oldMatrix.push(columns);
     for(var i = 1; i <= rows; i++){
         for(var j = 1; j <= columns; j++){
             var resultElement = document.createElement('input');
-            resultElement.setAttribute('class', 'resultInput');
+            resultElement.setAttribute('class', 'result-input');
             resultElement.setAttribute('value', result["resulte" + i + j]);
+            resultElement.setAttribute('id', "matrix3e" + i + j);
             resultElement.setAttribute('disabled', true);
-            resultDisplayDiv.appendChild(resultElement);
+            matrix3Display.appendChild(resultElement);
         }
         var nextLine = document.createElement('br');
-        nextLine.setAttribute('id', 'resultMatrixBr' + i);
-        resultDisplayDiv.appendChild(nextLine);
+        nextLine.setAttribute('id', 'matrix3' + 'br' + i);
+        matrix3Display.appendChild(nextLine);
     }
+    isMatrix3Created = true;
 }
 
 $(function (){
@@ -275,7 +288,6 @@ $(function (){
                 }
                 i++;
             }
-
             $.ajax({
               headers: {
                 "Accept": "application/json",
