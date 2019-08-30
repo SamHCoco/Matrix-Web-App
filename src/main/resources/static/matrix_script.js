@@ -7,13 +7,27 @@ var allButtonIds = ["addBtn", "subtractBtn", "multiplyBtn", "determinantBtn"];
 var largestRows = null; // largest row of the 2 matrices inputted by user, to be used to optimize matrix display
 var operator = null; // stores operator
 
+/** Generates and displays empty matrices*/
 function createMatrix(){
     var matrix;
-    var rows = document.getElementById('rows').value;
-    var columns = document.getElementById('columns').value;
+    var rows;
+    var columns;
+    if(isMatrix1Created && !isMatrix2Created){
+        if(operator == "+" || operator == "-"){
+           rows = oldMatrix[0];
+           columns = oldMatrix[1];
+        }
+    } else {
+        var row = document.getElementById("rows");
+        var column = document.getElementById("columns");
+        rows = row.value;
+        columns = column.value;
+        row.value = "";
+        column.value = "";
+    }
 
     if(rows == "" || columns == ""){
-        console.log("ERROR: createMatrix() INPUT CANNOT BE EMPTY");
+        console.log("ERROR: createMatrix() rows/columns INPUT CANNOT BE EMPTY");
         return null;
     }
 
@@ -23,10 +37,8 @@ function createMatrix(){
         if(rows <= 0 || columns <= 0){
             console.log("ERROR: createMatrix() MATRIX SIZE INPUT MUST BE POSITIVE");
             return null;
-        }else if(rows > 0 && columns > 0){
-            console.log("createMatrix(): ROWS AND COLUMNS SUCCESSFULLY PARSED AS INT");
         }
-    } catch(err){
+    } catch(error){
         console.log("ERROR: createMatrix() COULD NOT PARSE INPUT AS INT");
     }
 
@@ -68,8 +80,11 @@ function createMatrix(){
     }
 }
 
+/**
+* Handles user selecting operator.
+*  @param {string} clickedOperatorId The ID of the operator user clicked on.
+*/
 function setOperator(clickedOperatorId){
-    console.log("clicked id: " + clickedOperatorId); //  todo-remove this line
     var operatorDisplay = null;
     if(clickedOperatorId == "addBtn"){
         if(isMatrix1Created && !isMatrix2Created){
@@ -95,7 +110,11 @@ function setOperator(clickedOperatorId){
 
     try{
         if(operatorDisplay != null){
-            document.getElementById("operatorDisplay").appendChild(operatorDisplay);
+            if(operator == "det"){
+                document.getElementById("detOperatorDisplay").appendChild(operatorDisplay);
+            } else {
+                document.getElementById("operatorDisplay").appendChild(operatorDisplay);
+            }
             isOperatorSet = true;
             var operatorBtnIds = [];
             for(var i = 0; i < allButtonIds.length; i++ ){
@@ -106,8 +125,6 @@ function setOperator(clickedOperatorId){
             var clickedBtn = document.getElementById(clickedOperatorId);
             clickedBtn.style.backgroundColor = "green";
             disableButtons(true, operatorBtnIds);
-        } else {
-            console.log("setOperator() ERROR: operatorDisplay is null"); //todo-remove this line
         }
     } catch {
         console.log("ERROR: setOperator() error");
@@ -119,6 +136,10 @@ function setOperator(clickedOperatorId){
     }
 }
 
+/**
+* Sizes matrix display region to fit matrix being created.
+*  @param {number} matrixRows The rows of the matrix that is created.
+*/
 function optimizeDisplayRegion(matrixRows){
     var displayRegion = document.getElementById("matrixDisplay");
     if(largestRows == null){
@@ -131,6 +152,11 @@ function optimizeDisplayRegion(matrixRows){
     displayRegion.style.height = (80 * largestRows) + "px";
 }
 
+/**
+* Disables/enables buttons specified
+*  @param {boolean} boolean True to disable buttons, false to enable.
+*  @param {String[]} buttonIds The IDs of buttons to be enabled/disabled.
+*/
 function disableButtons(boolean, buttonIds){
     var i = 0;
     while(i < buttonIds.length){
@@ -146,6 +172,7 @@ function disableButtons(boolean, buttonIds){
     }
 }
 
+/** Resets application to its default, ready for new calculation */
 function clearScreen(){
     deleteButton();
     deleteButton();
@@ -156,6 +183,7 @@ function clearScreen(){
     largestRows = null;
 }
 
+/** Handles removal of matrices from client-side display and memory */
 function deleteMatrix(){
     var matrix;
     var rows;
@@ -185,7 +213,6 @@ function deleteMatrix(){
         oldMatrix.pop();
         for(var i = 1; i <= rows; i++){
             for(var j = 1; j <= columns; j++){
-                console.log("deleteMatrix(" + matrix + ") - DELETING: " + matrix + "e" + i + j); //todo-remove this line
                 var child = document.getElementById(matrix + "e" + i + j);
                 display.removeChild(child);
             }
@@ -204,8 +231,22 @@ function deleteMatrix(){
     }
 }
 
+/**
+* Handles the deletion of operator from client-side display and memory.
+* @returns {boolean} True if operator deleted, false otherwise.
+*/
 function deleteOperator(){
     try{
+        if(operator == "det" && isMatrix1Created){
+            return false;
+        }
+        if(operator == "det" && !isMatrix1Created){
+            var detOperatorDisplay = document.getElementById("detOperatorDisplay");
+            detOperatorDisplay.innerHTML = "";
+            operator = null;
+            isOperatorSet = false;
+            return true;
+        }
         if(isOperatorSet && isMatrix1Created && !isMatrix2Created){
             var operatorDisplay = document.getElementById("operatorDisplay");
             operatorDisplay.innerHTML = "";
@@ -220,6 +261,7 @@ function deleteOperator(){
     }
 }
 
+/** Handles user clicking 'DEL' button. Deletes matrix/operator from client side.*/
 function deleteButton(){
     if(!deleteOperator()){
         deleteMatrix();
@@ -229,6 +271,7 @@ function deleteButton(){
     resetDisplay();
 }
 
+/** Resets matrix display region back to default width and height. */
 function resetDisplay(){
     if(!isMatrix1Created && !isMatrix2Created){
         var displayRegion = document.getElementById("matrixDisplay");
@@ -236,7 +279,10 @@ function resetDisplay(){
     }
 }
 
-// Displays results from server to the screen
+/**
+* Displays the result of server-side calculation in client.
+* @param {Object} result The JSON data received from server, converted to JS object.
+*/
 function displayResult(result){
     var matrix3Display = document.getElementById("matrix3Display");
     document.getElementById("equalsDisplay").innerHTML = "=";
@@ -260,6 +306,7 @@ function displayResult(result){
     isMatrix3Created = true;
 }
 
+/** Handles POST request when user clicks 'GO!' button in client */
 $(function (){
     $("#goBtn").on("click", function(event){
         if(isMatrix1Created && isMatrix2Created && isOperatorSet || isMatrix1Created && operator == "det"){
@@ -282,8 +329,13 @@ $(function (){
             while(i <= counter){
                 for(var j = 1; j <= oldMatrix[2*i-2]; j++){
                     for(var k = 1; k <= oldMatrix[2*i-1]; k++){
-                        data["matrix" + i + "e" + j + k] = $("#matrix" + i + "e" + j + k).val();
-                        console.log("matrix" + i + "e" + j + k + " = " +  data["matrix" + i + "e" + j + k]); // todo-REMOVE
+                        var value = $("#matrix" + i + "e" + j + k).val();
+                        if(isNaN(parseInt(value))){
+                            console.log("ERROR: '" + value + "' is not a number"); // todo - DELETE
+                            return;
+                        } else {
+                            data["matrix" + i + "e" + j + k] = value;
+                        }
                     }
                 }
                 i++;
@@ -300,7 +352,6 @@ $(function (){
               success: function(resultData){
                 console.log("AJAX SUCCESS"); //todo - REMOVE
                 var receivedData = JSON.parse(JSON.stringify(resultData));
-                console.log("RESULT: " + receivedData); // todo - REMOVE
                 displayResult(receivedData);
               },
               error: function(){
