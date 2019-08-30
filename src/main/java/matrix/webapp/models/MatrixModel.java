@@ -9,6 +9,12 @@ import java.util.Map;
 
 public class MatrixModel {
 
+    /**
+     * Extracts matrices from Map, inserts them into a multi-dimensional array and
+     * adds the result to an ArrayList which is returned.
+     * @param data Map data from client containing matrix values
+     * @return An ArrayList of matrices in the form of multi-dimensional Double arrays
+     */
     public static ArrayList<Double[][]> extractMatrices(Map<String, String> data){
         ArrayList<Double[][]> result = new ArrayList<>();
 
@@ -67,6 +73,11 @@ public class MatrixModel {
         return result;
     }
 
+    /**
+     * Maps matrix values to a HashMap.
+     * @param matrix The matrix whose values are to be mapped to a HashMap
+     * @return HashMap of matrix values
+     */
     public static Map<String, String> convertArrayToMap(MatrixService matrix){
         Map<String, String> result = new HashMap<>();
         double[][] matrixElements = matrix.getMatrix();
