@@ -4,11 +4,11 @@
   <head>
       <meta charset="utf-8">
       <title>Blizzard : Matrix Calculator</title>
-      <link rel="stylesheet" href="matrix-display.css">
+      <link rel="stylesheet" href="style.css">
   </head>
 
   <body>
-      <h1>Blizzard: Matrix Calculator</h1>
+      <h1>Matrix Calculator Web App</h1>
       <form>
           <div class="controlPanel-display">
             ROWS <input type="number" id="rows" class="sizeInput-display">
@@ -20,7 +20,7 @@
                 <button type="button" onclick="setOperator(this.id)" id="addBtn" class="control-buttons">ADD<br>＋</button>
                 <button type="button" onclick="setOperator(this.id)" id="subtractBtn" class="control-buttons">SUB<br>－</button>
                 <button type="button" onclick="setOperator(this.id)" id="determinantBtn" class="control-buttons">DET<br>(M)</button>
-                <button type="button" onclick="setOperator(this.id)" id="multiplyBtn" class="control-buttons">PROD<br>×</button>
+                <button type="button" onclick="setOperator(this.id)" id="multiplyBtn" class="control-buttons">MULT<br>×</button>
                 <br>
                 <button type="button" id="goBtn" class="control-buttons">GO!</button>
                 <button type="button" onclick="clearScreen()" id="clearBtn" class="control-buttons">CLR</button>
@@ -30,6 +30,7 @@
           <br>
           <br>
           <div id="matrixDisplay" class="display-region">
+              <div id="detOperatorDisplay" class="det-operator-display"></div>
               <div id="matrix1Display" class="matrix1-display"></div>
               <div id="operatorDisplay" class="operator-display"></div>
               <div id="matrix2Display" class="matrix2-display"></div>
