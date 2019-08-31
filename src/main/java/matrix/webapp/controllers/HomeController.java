@@ -45,13 +45,27 @@ public class HomeController {
             matrix2.setMatrix(MatrixService.doubleArrayUnboxer(matrices.get(1)));
         }
 
+        if(operator.equals("det")){
+            matrix1 = new MatrixService("MATRIX 1", size.get(Constant.MATRIX_1_ROWS),
+                    size.get(Constant.MATRIX_1_COLUMNS));
+            matrix1.setMatrix(MatrixService.doubleArrayUnboxer(matrices.get(0)));
+        }
+
         if(operator.equals("+")){
             matrix1.addMatrix(matrix2);
         } else if(operator.equals("-")){
             matrix1.subtractMatrix(matrix2);
         } else if(operator.equals("x")){
             matrix1.multiply(matrix2);
+        } else if(operator.equals("det")){
+            matrix1.calculateDeterminant();
         }
-        return MatrixModel.convertArrayToMap(matrix1);
+        if(operator.equals("+") || operator.equals("-") || operator.equals("x")){
+            return MatrixModel.convertArrayToMap(matrix1);
+        }
+        if(operator.equals("det")){
+            return MatrixModel.convertDetToMap(matrix1);
+        }
+        return null;
     }
 }
