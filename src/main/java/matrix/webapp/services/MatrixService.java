@@ -61,6 +61,10 @@ public final class MatrixService {
         return matrix;
     }
 
+    public double getDeterminant(){
+        return determinant;
+    }
+
     /**
      * Prints the user inputted matrix, with every element rounded to 3 d.p.
      */
