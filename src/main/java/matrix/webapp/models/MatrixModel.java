@@ -91,4 +91,12 @@ public class MatrixModel {
         return result;
     }
 
+    public static Map<String, String> convertDetToMap(MatrixService matrix){
+        Map<String, String> result = new HashMap<>();
+        result.put("resulte11", String.valueOf(matrix.getDeterminant()));
+        result.put("resultRows", "1");
+        result.put("resultColumns", "1");
+        return result;
+    }
+
 }
