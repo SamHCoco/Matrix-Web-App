@@ -306,11 +306,40 @@ function displayResult(result){
     isMatrix3Created = true;
 }
 
+/** Validates matrix size for determinant (DET) calculations */
+function detIsSizeValid(){
+    if(operator == "det"){
+        if(oldMatrix[0] != oldMatrix[1]){
+            console.log("ERROR: DET matrices must be NxN"); // todo - REMOVE
+            return false;
+        }
+        if(oldMatrix[0] == 2 || oldMatrix[0] == 3){
+            return true;
+        } else {
+            console.log("ERROR: DET matrices must be 2x2 or 3x3"); // todo - REMOVE
+            return false;
+        }
+    } else {
+        return true;
+    }
+}
+
 /** Handles POST request when user clicks 'GO!' button in client */
 $(function (){
     $("#goBtn").on("click", function(event){
+        // DEBUGGING
+        console.log("*********************************************************************************"); // todo - REMOVE
+        console.log("GO! CLICKED"); // todo - REMOVE
+        console.log("isMatrix1Created: " + isMatrix1Created); // todo - REMOVE
+        console.log("isMatrix2Created: " + isMatrix2Created); // todo - REMOVE
+        console.log("isOperatorSet: " + isOperatorSet); // todo - REMOVE
+        console.log("operator: " + operator); // todo - REMOVE
+        console.log("*********************************************************************************"); // todo - REMOVE
         if(isMatrix1Created && isMatrix2Created && isOperatorSet || isMatrix1Created && operator == "det"){
             event.preventDefault();
+            if(!detIsSizeValid()){
+              return;
+            }
             console.log("Ajax() EXECUTED"); // todo - REMOVE
             var data = {
               operator : operator,
