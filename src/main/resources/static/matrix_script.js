@@ -123,7 +123,8 @@ function setOperator(clickedOperatorId){
                 }
             }
             var clickedBtn = document.getElementById(clickedOperatorId);
-            clickedBtn.style.backgroundColor = "green";
+            clickedBtn.style.color = "SpringGreen";
+            clickedBtn.style.borderColor = "SpringGreen";
             disableButtons(true, operatorBtnIds);
         }
     } catch {
@@ -163,10 +164,13 @@ function disableButtons(boolean, buttonIds){
         var button = document.getElementById(buttonIds[i]);
         if(boolean == true){
             button.disabled = true;
-            button.style.backgroundColor = "silver";
+            button.style.color = "#b3b3b3"; // silver shade
+            button.style.borderColor = "#b3b3b3" // silver shade
         } else if(boolean == false){
             button.disabled = false;
             button.style.backgroundColor = "DodgerBlue";
+            button.style.borderColor = "white";
+            button.style.color = "white";
         }
         i++;
     }
@@ -219,13 +223,13 @@ function deleteMatrix(){
             var brElement = document.getElementById(matrix + "br" + i);
             display.removeChild(brElement);
         }
-        // sets variable back to default value
         if(matrix == "matrix3"){
             isMatrix3Created = false;
             document.getElementById("equalsDisplay").innerHTML = "";
         } else if(matrix == "matrix2"){
             isMatrix2Created = false;
         } else if(matrix == "matrix1"){
+            oldMatrix = [];
             isMatrix1Created = false;
         }
     }
@@ -279,6 +283,17 @@ function resetDisplay(){
     }
 }
 
+function formatDetResultDisplay(){
+    if(operator == "det"){
+        var resultInput = document.getElementById("matrix3e11");
+        resultInput.style.width = "130px";
+        resultInput.style.height = "130px";
+        resultInput.style.fontSize = "50px";
+        resultInput.style.borderStyle = "hidden";
+        resultInput.style.textAlign = "center";
+    }
+}
+
 /**
 * Displays the result of server-side calculation in client.
 * @param {Object} result The JSON data received from server, converted to JS object.
@@ -288,8 +303,8 @@ function displayResult(result){
     document.getElementById("equalsDisplay").innerHTML = "=";
     var rows = result["resultRows"];
     var columns = result["resultColumns"];
-    oldMatrix.push(rows);
-    oldMatrix.push(columns);
+    oldMatrix[4] = rows;
+    oldMatrix[5] = columns;
     for(var i = 1; i <= rows; i++){
         for(var j = 1; j <= columns; j++){
             var resultElement = document.createElement('input');
@@ -303,6 +318,7 @@ function displayResult(result){
         nextLine.setAttribute('id', 'matrix3' + 'br' + i);
         matrix3Display.appendChild(nextLine);
     }
+    formatDetResultDisplay();
     isMatrix3Created = true;
 }
 
@@ -324,17 +340,24 @@ function detIsSizeValid(){
     }
 }
 
+// Method for viewing all global variable values (for DEBUG) todo - REMOVE
+function debug(){
+    console.log("*********************************************************************************"); // todo - REMOVE
+    console.log("oldMatrix: " + oldMatrix);
+    console.log("isMatrix1Created: " + isMatrix1Created); // todo - REMOVE
+    console.log("isMatrix2Created: " + isMatrix2Created); // todo - REMOVE
+    console.log("isMatrix3Created: " + isMatrix3Created); // todo - REMOVE
+    console.log("isOperatorSet: " + isOperatorSet); // todo - REMOVE
+    console.log("operator: " + operator); // todo - REMOVE
+    console.log("*********************************************************************************"); // todo - REMOVE
+}
+
 /** Handles POST request when user clicks 'GO!' button in client */
 $(function (){
     $("#goBtn").on("click", function(event){
         // DEBUGGING
-        console.log("*********************************************************************************"); // todo - REMOVE
-        console.log("GO! CLICKED"); // todo - REMOVE
-        console.log("isMatrix1Created: " + isMatrix1Created); // todo - REMOVE
-        console.log("isMatrix2Created: " + isMatrix2Created); // todo - REMOVE
-        console.log("isOperatorSet: " + isOperatorSet); // todo - REMOVE
-        console.log("operator: " + operator); // todo - REMOVE
-        console.log("*********************************************************************************"); // todo - REMOVE
+        console.log("GO! BUTTON CLICKED"); // todo - REMOVE
+        debug(); // todo - REMOVE
         if(isMatrix1Created && isMatrix2Created && isOperatorSet || isMatrix1Created && operator == "det"){
             event.preventDefault();
             if(!detIsSizeValid()){
