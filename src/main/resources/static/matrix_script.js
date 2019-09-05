@@ -12,6 +12,7 @@ function createMatrix(){
     var matrix;
     var rows;
     var columns;
+
     if(isMatrix1Created && !isMatrix2Created){
         if(operator == "+" || operator == "-"){
            rows = oldMatrix[0];
@@ -54,9 +55,12 @@ function createMatrix(){
 
     if(!isMatrix1Created || !isMatrix2Created && isOperatorSet){
         console.log(matrix + " BEING GENERATED"); // todo- remove this line
-        optimizeDisplayRegion(rows);
         oldMatrix.push(rows);
         oldMatrix.push(columns);
+        if(!detIsSizeValid()){
+            return;
+        }
+        optimizeDisplayRegion(rows);
         var displayDiv = document.getElementById(matrix + "Display");
         for(var i = 1; i <= rows; i++){
             for(var j = 1; j <= columns; j++){
@@ -79,6 +83,29 @@ function createMatrix(){
         }
     }
 }
+
+/** Handles 'Enter' and 'del' keyboard buttons being pressed.
+ */
+addEventListener("keyup", function(event){
+    if(event.key ==  "Delete"){
+        console.log("Delete button pressed"); // todo - REMOVE
+        deleteButton();
+
+    } else if(event.key == "Enter"){
+        console.log("Enter key pressed"); // todo - REMOVE
+        var rowsInput = document.getElementById("rows");
+        var columnsInput = document.getElementById("columns");
+        if(rowsInput.value == ""){
+            rowsInput.focus();
+        } else if(columnsInput.value == ""){
+            columnsInput.focus();
+        }
+        if(rowsInput.value != "" && columnsInput.value != ""){
+            document.getElementById("enterBtn").click();
+            rowsInput.focus();
+        }
+    }
+});
 
 /**
 * Handles user selecting operator.
@@ -164,8 +191,8 @@ function disableButtons(boolean, buttonIds){
         var button = document.getElementById(buttonIds[i]);
         if(boolean == true){
             button.disabled = true;
-            button.style.color = "#b3b3b3"; // silver shade
-            button.style.borderColor = "#b3b3b3" // silver shade
+            button.style.color = "gold"; // silver shade #b3b3b3
+            button.style.borderColor = "gold" // silver shade
         } else if(boolean == false){
             button.disabled = false;
             button.style.backgroundColor = "DodgerBlue";
@@ -184,7 +211,10 @@ function clearScreen(){
     deleteButton();
     document.getElementById("rows").value = "";
     document.getElementById("columns").value = "";
+    document.getElementById("warningDisplay").innerHTML = "";
     largestRows = null;
+    oldMatrix = [];
+    disableButtons(false, allButtonIds);
 }
 
 /** Handles removal of matrices from client-side display and memory */
@@ -326,13 +356,17 @@ function displayResult(result){
 function detIsSizeValid(){
     if(operator == "det"){
         if(oldMatrix[0] != oldMatrix[1]){
-            console.log("ERROR: DET matrices must be NxN"); // todo - REMOVE
+            deleteOperator();
+            var warningDisplay = document.getElementById("warningDisplay");
+            warningDisplay.innerHTML = "DETERMINANT CALCULATION ERROR: Matrix must be of size NxN";
             return false;
         }
         if(oldMatrix[0] == 2 || oldMatrix[0] == 3){
             return true;
         } else {
-            console.log("ERROR: DET matrices must be 2x2 or 3x3"); // todo - REMOVE
+            deleteOperator();
+            var warningDisplay = document.getElementById("warningDisplay");
+            warningDisplay.innerHTML = "DETERMINANT CALCULATION ERROR: Matrix must be of size 2x2 or 3x3!";
             return false;
         }
     } else {
@@ -360,9 +394,6 @@ $(function (){
         debug(); // todo - REMOVE
         if(isMatrix1Created && isMatrix2Created && isOperatorSet || isMatrix1Created && operator == "det"){
             event.preventDefault();
-            if(!detIsSizeValid()){
-              return;
-            }
             console.log("Ajax() EXECUTED"); // todo - REMOVE
             var data = {
               operator : operator,
