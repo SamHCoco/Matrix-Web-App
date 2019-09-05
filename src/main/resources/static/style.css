@@ -63,6 +63,12 @@ body {
   background-color: white;
 }
 
+.warning-display{
+    color: black;
+    font-size: 30px;
+    margin-left: 10px;
+}
+
 .matrix1-display{
     padding-left: 10px;
     padding-top: 5px;
@@ -88,8 +94,7 @@ body {
     display: inline-block;
     width: 60px;
     height: 40px;
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 25px;
     margin: 4px 4px 4px 4px;
     border: 1px solid black;
     color: black;
