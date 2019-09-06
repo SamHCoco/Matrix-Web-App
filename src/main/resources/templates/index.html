@@ -11,8 +11,10 @@
       <h1>Matrix Calculator Web App</h1>
       <form>
           <div class="controlPanel-display">
-            ROWS <input type="number" id="rows" class="sizeInput-display">
-            COLUMNS <input type="number" id="columns" class="sizeInput-display">
+            ROWS <input type="number" id="rows" class="sizeInput-display" onfocus="onSizeInputFocus(this.id)"
+                        onblur="onSizeInputBlur(this.id)">
+            COLUMNS <input type="number" id="columns" class="sizeInput-display" onfocus="onSizeInputFocus(this.id)"
+                        onblur="onSizeInputBlur(this.id)">
             <button type="button" onclick="createMatrix()" id="enterBtn" class="sizeInput-display">ENTER</button>
             <br>
             <br>
