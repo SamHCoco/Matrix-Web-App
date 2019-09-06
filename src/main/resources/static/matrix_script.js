@@ -6,6 +6,8 @@ var isOperatorSet = false; // whether an operator has been selected or not
 var allButtonIds = ["addBtn", "subtractBtn", "multiplyBtn", "determinantBtn"];
 var largestRows = null; // largest row of the 2 matrices inputted by user, to be used to optimize matrix display
 var operator = null; // stores operator
+var m1BiggestCharCount = -1; // stores the largest amount of characters possessed by any input field in matrix 1 display
+var m2BiggestCharCount = -1; // stores the largest amount of characters possessed by any input field in matrix 2 display
 
 /** Generates and displays empty matrices*/
 function createMatrix(){
@@ -68,8 +70,13 @@ function createMatrix(){
                elementInput.setAttribute('type', 'number');
                elementInput.setAttribute('id', matrix + 'e' + i + j);
                elementInput.setAttribute('name', matrix + 'e' + i + j);
-               elementInput.setAttribute('class', 'elementInput');
+               if(matrix == "matrix1"){
+                  elementInput.setAttribute('class', 'element-input1');
+               } else if(matrix == "matrix2"){
+                  elementInput.setAttribute('class', 'element-input2');
+               }
                elementInput.setAttribute('min', '1');
+               elementInput.setAttribute('oninput', 'resizeInputFields(this.id)');
                displayDiv.appendChild(elementInput);
             }
             var nextLine = document.createElement('br');
@@ -84,15 +91,22 @@ function createMatrix(){
     }
 }
 
+/** Changes border colour of matrix size input fields when they're focus */
+function onSizeInputFocus(id){
+    document.getElementById(id).style.borderColor = "SpringGreen";
+}
+
+/** Changes border colour of matrix size input fields when they're out of focus */
+function onSizeInputBlur(id){
+    document.getElementById(id).style.borderColor = "black";
+}
+
 /** Handles 'Enter' and 'del' keyboard buttons being pressed.
  */
 addEventListener("keyup", function(event){
     if(event.key ==  "Delete"){
-        console.log("Delete button pressed"); // todo - REMOVE
         deleteButton();
-
     } else if(event.key == "Enter"){
-        console.log("Enter key pressed"); // todo - REMOVE
         var rowsInput = document.getElementById("rows");
         var columnsInput = document.getElementById("columns");
         if(rowsInput.value == ""){
@@ -106,6 +120,40 @@ addEventListener("keyup", function(event){
         }
     }
 });
+
+/** Resizes input fields as user types values */
+function resizeInputFields(id){
+    var inputElement = document.getElementById(id);
+    var length = inputElement.value.length;
+    var inputClass;
+    var biggestCharLength;
+
+    if(id.slice(0, 7) == "matrix1"){
+        inputClass = "element-input1";
+        if(length > m1BiggestCharCount){
+            m1BiggestCharCount = length;
+        }
+        biggestCharLength = m1BiggestCharCount;
+        console.log("element-input1 SELECTED"); // todo - REMOVE
+    } else if(id.slice(0, 7) == "matrix2"){
+        inputClass = "element-input2";
+        if(length > m2BiggestCharCount){
+            m2BiggestCharCount = length;
+        }
+        biggestCharLength = m2BiggestCharCount;
+        console.log("element-input2 SELECTED"); // todo - REMOVE
+    }
+    if(length >= biggestCharLength){
+        if(length > 3){
+            var matrixDisplay = document.getElementById("matrixDisplay");
+            var elementInputs = matrixDisplay.getElementsByClassName(inputClass);
+            for (var i = 0; i < elementInputs.length; i++) {
+                elementInputs[i].style.width = (length * 20 - (length * 20 * 0.15)) + "px";
+            }
+            biggestCharLength = length;
+        }
+    }
+}
 
 /**
 * Handles user selecting operator.
@@ -256,6 +304,7 @@ function deleteMatrix(){
         if(matrix == "matrix3"){
             isMatrix3Created = false;
             document.getElementById("equalsDisplay").innerHTML = "";
+            disableButtons(false, ["goBtn"]);
         } else if(matrix == "matrix2"){
             isMatrix2Created = false;
         } else if(matrix == "matrix1"){
@@ -290,7 +339,7 @@ function deleteOperator(){
         } else {
             return false;
         }
-    } catch(err){
+    } catch(error){
         console.log("ERROR: deleteOperator() error");
     }
 }
@@ -392,6 +441,7 @@ $(function (){
         // DEBUGGING
         console.log("GO! BUTTON CLICKED"); // todo - REMOVE
         debug(); // todo - REMOVE
+        disableButtons(true, ["goBtn"]);
         if(isMatrix1Created && isMatrix2Created && isOperatorSet || isMatrix1Created && operator == "det"){
             event.preventDefault();
             console.log("Ajax() EXECUTED"); // todo - REMOVE
