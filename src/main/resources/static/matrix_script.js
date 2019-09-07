@@ -66,17 +66,19 @@ function createMatrix(){
         var displayDiv = document.getElementById(matrix + "Display");
         for(var i = 1; i <= rows; i++){
             for(var j = 1; j <= columns; j++){
-               var elementInput = document.createElement('input');
-               elementInput.setAttribute('type', 'number');
-               elementInput.setAttribute('id', matrix + 'e' + i + j);
-               elementInput.setAttribute('name', matrix + 'e' + i + j);
+               var elementInput = document.createElement("input");
+               elementInput.setAttribute("type", "number");
+               elementInput.setAttribute("id", matrix + "e" + i + j);
+               elementInput.setAttribute("name", matrix + "e" + i + j);
+               elementInput.setAttribute("min", "0.00000001");
+               elementInput.setAttribute("max", "9999999");
+               elementInput.setAttribute("oninput", "resizeInputFields(this.id)");
+               elementInput.setAttribute("onkeydown", "isInputInValidRange(this.id, event)");
                if(matrix == "matrix1"){
-                  elementInput.setAttribute('class', 'element-input1');
+                 elementInput.setAttribute('class', 'element-input1');
                } else if(matrix == "matrix2"){
-                  elementInput.setAttribute('class', 'element-input2');
+                 elementInput.setAttribute('class', 'element-input2');
                }
-               elementInput.setAttribute('min', '1');
-               elementInput.setAttribute('oninput', 'resizeInputFields(this.id)');
                displayDiv.appendChild(elementInput);
             }
             var nextLine = document.createElement('br');
@@ -98,7 +100,7 @@ function onSizeInputFocus(id){
 
 /** Changes border colour of matrix size input fields when they're out of focus */
 function onSizeInputBlur(id){
-    document.getElementById(id).style.borderColor = "black";
+    document.getElementById(id).style.borderColor = "white";
 }
 
 /** Handles 'Enter' and 'del' keyboard buttons being pressed.
@@ -121,10 +123,25 @@ addEventListener("keyup", function(event){
     }
 });
 
+/** Restricts numerical size of user's input into matrix to a valid range */
+function isInputInValidRange(id, event){
+    var value = document.getElementById(id).value;
+    if(value == ""){
+        return;
+    }
+    if(value < -9_999_999 || value > 9_999_999){
+        console.log("INPUT WAS TO SMALL OR TOO BIG"); // todo - REMOVE
+        event.preventDefault();
+        var length = value.length;
+        document.getElementById(id).value = value.slice(0, length - 1);
+    }
+}
+
 /** Resizes input fields as user types values */
 function resizeInputFields(id){
     var inputElement = document.getElementById(id);
-    var length = inputElement.value.length;
+    var inputValue = inputElement.value;
+    var length = inputValue.length;
     var inputClass;
     var biggestCharLength;
 
