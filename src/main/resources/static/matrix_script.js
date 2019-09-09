@@ -8,6 +8,7 @@ var largestRows = null; // largest row of the 2 matrices inputted by user, to be
 var operator = null; // stores operator
 var m1BiggestCharCount = -1; // stores the largest amount of characters possessed by any input field in matrix 1 display
 var m2BiggestCharCount = -1; // stores the largest amount of characters possessed by any input field in matrix 2 display
+var m3BiggestCharCount = -1; // stores the largest amount of characters possessed by any input field in matrix 2 display
 
 /** Generates and displays empty matrices*/
 function createMatrix(){
@@ -159,9 +160,16 @@ function resizeInputFields(id){
         }
         biggestCharLength = m2BiggestCharCount;
         console.log("element-input2 SELECTED"); // todo - REMOVE
+    } else if(id.slice(0, 7) == "matrix3"){
+        inputClass = "element-input3";
+        if(length > m3BiggestCharCount){
+            m3BiggestCharCount = length;
+        }
+        biggestCharLength = m3BiggestCharCount;
+        console.log("element-input3 SELECTED"); // todo - REMOVE
     }
     if(length >= biggestCharLength){
-        if(length > 3){
+        if(length > 3 && length <= 9){
             var matrixDisplay = document.getElementById("matrixDisplay");
             var elementInputs = matrixDisplay.getElementsByClassName(inputClass);
             for (var i = 0; i < elementInputs.length; i++) {
@@ -404,11 +412,12 @@ function displayResult(result){
     for(var i = 1; i <= rows; i++){
         for(var j = 1; j <= columns; j++){
             var resultElement = document.createElement('input');
-            resultElement.setAttribute('class', 'result-input');
+            resultElement.setAttribute('class', 'element-input3');
             resultElement.setAttribute('value', result["resulte" + i + j]);
             resultElement.setAttribute('id', "matrix3e" + i + j);
             resultElement.setAttribute('disabled', true);
             matrix3Display.appendChild(resultElement);
+            resizeInputFields('matrix3e' + i + j);
         }
         var nextLine = document.createElement('br');
         nextLine.setAttribute('id', 'matrix3' + 'br' + i);
@@ -438,18 +447,6 @@ function detIsSizeValid(){
     } else {
         return true;
     }
-}
-
-// Method for viewing all global variable values (for DEBUG) todo - REMOVE
-function debug(){
-    console.log("*********************************************************************************"); // todo - REMOVE
-    console.log("oldMatrix: " + oldMatrix);
-    console.log("isMatrix1Created: " + isMatrix1Created); // todo - REMOVE
-    console.log("isMatrix2Created: " + isMatrix2Created); // todo - REMOVE
-    console.log("isMatrix3Created: " + isMatrix3Created); // todo - REMOVE
-    console.log("isOperatorSet: " + isOperatorSet); // todo - REMOVE
-    console.log("operator: " + operator); // todo - REMOVE
-    console.log("*********************************************************************************"); // todo - REMOVE
 }
 
 /** Handles POST request when user clicks 'GO!' button in client */
