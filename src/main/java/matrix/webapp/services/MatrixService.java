@@ -1,6 +1,5 @@
 package matrix.webapp.services;
 
-// todo - alter class for use in web application
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -18,23 +17,11 @@ public final class MatrixService {
      * @param name Name of the matrix
      * @param rows Rows of the matrix
      * @param columns Columns of the matrix
-     * @param unitTesting True if unit testing is being carried out, false otherwise
      */
-    public MatrixService(String name, int rows, int columns, boolean unitTesting){
+    public MatrixService(String name, int rows, int columns){
         this.name = name;
         this.rows = rows;
         this.columns = columns;
-    }
-
-
-    /**
-     * Constructor for user to work with.
-     * @param name The name of the matrix
-     * @param rows The number of rows in matrix
-     * @param columns The number of columns in matrix
-     */
-    public MatrixService(String name, int rows, int columns){
-        this(name, rows, columns, false);
     }
 
 
@@ -91,7 +78,7 @@ public final class MatrixService {
                     addedMatrix[i][j] = formatTo3DP(x.matrix[i][j] + matrix[i][j]);
                 }
             }
-            System.out.println("ADDED MATRIX: " + name + " + " + x.name);
+            System.out.println("ADDED MATRIX: " + name + " + " + x.name); // todo - REMOVE
             matrix = addedMatrix;
             printMatrix();
             return matrix;
@@ -114,7 +101,7 @@ public final class MatrixService {
                     subtractedMatrix[i][j] = formatTo3DP( matrix[i][j] - x.matrix[i][j]);
                 }
             }
-            System.out.println("SUBTRACTED MATRIX: " + name + " - " + x.name);
+            System.out.println("SUBTRACTED MATRIX: " + name + " - " + x.name); // todo - REMOVE
             matrix = subtractedMatrix;
             printMatrix();
             return matrix;
@@ -134,7 +121,7 @@ public final class MatrixService {
                 matrix[i][j] = formatTo3DP(scalar * matrix[i][j]);
             }
         }
-        System.out.println("SCALAR MULTIPLICATION RESULT: " + scalar + " * " + name);
+        System.out.println("SCALAR MULTIPLICATION RESULT: " + scalar + " * " + name); // todo - REMOVE
         printMatrix();
         return matrix;
     }
@@ -157,7 +144,7 @@ public final class MatrixService {
                 }
             }
             // displays result to user
-            System.out.println("MULTIPLICATION RESULT: " + name + " * " + x.name);
+            System.out.println("MULTIPLICATION RESULT: " + name + " * " + x.name); // todo - REMOVE
             double[][] originalMatrix = matrix;
             matrix = doubleArrayUnboxer(result);
             printMatrix();
@@ -175,11 +162,11 @@ public final class MatrixService {
         switch(size){
             case 2:
                 determinant = calculate2x2Det(false);
-                System.out.println("\nMatrix " + name + " Determinant = " + determinant);
+                System.out.println("\nMatrix " + name + " Determinant = " + determinant); // todo - REMOVE
                 break;
             case 3:
                 determinant = calculate3x3Det(false);
-                System.out.println("\nMatrix " + name + " Determinant = " + determinant);
+                System.out.println("\nMatrix " + name + " Determinant = " + determinant); // todo - REMOVE
                 break;
         }
         return formatTo3DP(determinant);
