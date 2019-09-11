@@ -91,6 +91,13 @@ public class MatrixModel {
         return result;
     }
 
+    /**
+     * Puts the determinant of a matrix into a HashMap, as a single matrix element (1st row, 1st columns),
+     * and returns the HashMap as a Map<String, String>. This method prepares the determinant to be sent to the client
+     * as part of the HTTP response body.
+     * @param matrix The matrix whose determinant is to be returned.
+     * @return A Map containing the matrix determinant.
+     */
     public static Map<String, String> convertDetToMap(MatrixService matrix){
         Map<String, String> result = new HashMap<>();
         result.put("resulte11", String.valueOf(matrix.getDeterminant()));
