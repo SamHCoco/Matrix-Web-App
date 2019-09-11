@@ -187,22 +187,22 @@ function resizeInputFields(id){
 function setOperator(clickedOperatorId){
     var operatorDisplay = null;
     if(clickedOperatorId == "addBtn"){
-        if(isMatrix1Created && !isMatrix2Created){
+        if(isMatrix1Created && !isMatrix2Created && !isOperatorSet){
             operatorDisplay = document.createTextNode("+");
             operator = "+";
         }
     } else if(clickedOperatorId == "subtractBtn"){
-        if(isMatrix1Created && !isMatrix2Created){
+        if(isMatrix1Created && !isMatrix2Created && !isOperatorSet){
             operatorDisplay = document.createTextNode("-");
             operator = "-";
         }
     } else if(clickedOperatorId == "multiplyBtn"){
-        if(isMatrix1Created){
+        if(isMatrix1Created && !isOperatorSet){
             operatorDisplay = document.createTextNode("x");
             operator = "x";
         }
     } else if(clickedOperatorId == "determinantBtn"){
-        if(!isMatrix1Created && !isMatrix2Created){
+        if(!isMatrix1Created && !isMatrix2Created && !isOperatorSet){
             operatorDisplay = document.createTextNode("DET");
             operator = "det";
         }
@@ -409,21 +409,27 @@ function displayResult(result){
     var columns = result["resultColumns"];
     oldMatrix[4] = rows;
     oldMatrix[5] = columns;
+    var longestCharsId = [];
     for(var i = 1; i <= rows; i++){
         for(var j = 1; j <= columns; j++){
+            var value = result["resulte" + i + j];
             var resultElement = document.createElement('input');
             resultElement.setAttribute('class', 'element-input3');
-            resultElement.setAttribute('value', result["resulte" + i + j]);
+            resultElement.setAttribute('value', value);
             resultElement.setAttribute('id', "matrix3e" + i + j);
             resultElement.setAttribute('disabled', true);
             matrix3Display.appendChild(resultElement);
-            resizeInputFields('matrix3e' + i + j);
+            if(value.length > m3BiggestCharCount){
+                longestCharsId["id"] = "matrix3e" + i + j;
+                m3BiggestCharCount = value.length;
+            }
         }
         var nextLine = document.createElement('br');
         nextLine.setAttribute('id', 'matrix3' + 'br' + i);
         matrix3Display.appendChild(nextLine);
     }
     formatDetResultDisplay();
+    resizeInputFields(longestCharsId["id"]);
     isMatrix3Created = true;
 }
 
@@ -454,7 +460,6 @@ $(function (){
     $("#goBtn").on("click", function(event){
         // DEBUGGING
         console.log("GO! BUTTON CLICKED"); // todo - REMOVE
-        debug(); // todo - REMOVE
         disableButtons(true, ["goBtn"]);
         if(isMatrix1Created && isMatrix2Created && isOperatorSet || isMatrix1Created && operator == "det"){
             event.preventDefault();
