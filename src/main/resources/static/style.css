@@ -87,6 +87,8 @@ body {
 
 .result-display{
     display: inline-block;
+    padding-left: 10px;
+    padding-top: 5px;
     color: black;
 }
 
