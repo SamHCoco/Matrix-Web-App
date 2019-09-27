@@ -31,7 +31,7 @@ function createMatrix(){
     }
 
     if(rows == "" || columns == ""){
-        console.log("ERROR: createMatrix() rows/columns INPUT CANNOT BE EMPTY");
+        console.log("ERROR: createMatrix() rows/columns INPUT CANNOT BE EMPTY"); // todo - REMOVE
         return null;
     }
 
@@ -39,8 +39,16 @@ function createMatrix(){
         rows = parseInt(rows);
         columns = parseInt(columns);
         if(rows <= 0 || columns <= 0){
-            console.log("ERROR: createMatrix() MATRIX SIZE INPUT MUST BE POSITIVE");
+            console.log("ERROR: createMatrix() MATRIX SIZE INPUT MUST BE POSITIVE"); // todo - REMOVE
             return null;
+        }
+        if(rows > 6){
+            console.log("Matrix rows must be less than or equal to 6"); // todo - REMOVE
+            return;
+        }
+        if(columns > 6){
+            console.log("Matrix columns must be less than or equal to 6"); // todo - REMOVE
+            return;
         }
     } catch(error){
         console.log("ERROR: createMatrix() COULD NOT PARSE INPUT AS INT");
@@ -130,7 +138,7 @@ function isInputInValidRange(id, event){
     if(value == ""){
         return;
     }
-    if(value < -9_999_999 || value > 9_999_999){
+    if(value < -9_999_99 || value > 9_999_999){
         console.log("INPUT WAS TO SMALL OR TOO BIG"); // todo - REMOVE
         event.preventDefault();
         var length = value.length;
@@ -409,6 +417,8 @@ function displayResult(result){
     var columns = result["resultColumns"];
     oldMatrix[4] = rows;
     oldMatrix[5] = columns;
+    var totalRows = Number(largestRows) + Number(rows);
+    optimizeDisplayRegion(totalRows); // todo - Add conditions for resizing display region
     var longestCharsId = [];
     for(var i = 1; i <= rows; i++){
         for(var j = 1; j <= columns; j++){
@@ -455,7 +465,7 @@ function detIsSizeValid(){
     }
 }
 
-/** Handles POST request when user clicks 'GO!' button in client */
+/** Handles POST request when user clicks 'GO' button in client */
 $(function (){
     $("#goBtn").on("click", function(event){
         // DEBUGGING
