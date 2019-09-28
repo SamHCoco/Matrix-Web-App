@@ -10,24 +10,31 @@ var m1BiggestCharCount = -1; // stores the largest amount of characters possesse
 var m2BiggestCharCount = -1; // stores the largest amount of characters possessed by any input field in matrix 2 display
 var m3BiggestCharCount = -1; // stores the largest amount of characters possessed by any input field in matrix 2 display
 
-/** Generates and displays empty matrices*/
+/** Generates and displays an empty matrix*/
 function createMatrix(){
     var matrix;
     var rows;
     var columns;
 
-    if(isMatrix1Created && !isMatrix2Created){
-        if(operator == "+" || operator == "-"){
-           rows = oldMatrix[0];
-           columns = oldMatrix[1];
-        }
+    if(isMatrix1Created && !isMatrix2Created && operator == "+"){
+       rows = oldMatrix[0];
+       columns = oldMatrix[1];
+    } else if(isMatrix1Created && !isMatrix2Created && operator == "-"){
+       rows = oldMatrix[0];
+       columns = oldMatrix[1];
     } else {
-        var row = document.getElementById("rows");
-        var column = document.getElementById("columns");
-        rows = row.value;
-        columns = column.value;
-        row.value = "";
-        column.value = "";
+       if(operator == "x"){
+         if(!isMultiplyValid()){
+            console.log("MULTIPLICATION ERROR: MATRIX DIMENSIONS INCORRECT"); // todo - REMOVE
+            return;
+         }
+       }
+       var row = document.getElementById("rows");
+       var column = document.getElementById("columns");
+       rows = row.value;
+       columns = column.value;
+       row.value = "";
+       column.value = "";
     }
 
     if(rows == "" || columns == ""){
@@ -465,6 +472,20 @@ function detIsSizeValid(){
     }
 }
 
+/** Determines whether the second operand matrix has the correct dimensions to be
+multiplied with the first matrix operand and returns TRUE if so, FALSE otherwise */
+function isMultiplyValid(){
+    if(isMatrix1Created && !isMatrix2Created && operator == "x"){
+        var matrix2Rows = document.getElementById("rows").value;
+        var matrix1Columns = oldMatrix[1];
+        if(matrix1Columns == matrix2Rows){
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
 /** Handles POST request when user clicks 'GO' button in client */
 $(function (){
     $("#goBtn").on("click", function(event){
@@ -493,7 +514,8 @@ $(function (){
                     for(var k = 1; k <= oldMatrix[2*i-1]; k++){
                         var value = $("#matrix" + i + "e" + j + k).val();
                         if(isNaN(parseInt(value))){
-                            console.log("ERROR: '" + value + "' is not a number"); // todo - DELETE
+                            console.log("GO ERROR: '" + value + "' is not a number"); // todo - DELETE
+                            disableButtons(false, ["goBtn"]);
                             return;
                         } else {
                             data["matrix" + i + "e" + j + k] = value;
