@@ -90,6 +90,7 @@ function createMatrix(){
                elementInput.setAttribute("max", "9999999");
                elementInput.setAttribute("oninput", "resizeInputFields(this.id)");
                elementInput.setAttribute("onkeydown", "isInputInValidRange(this.id, event)");
+               elementInput.setAttribute("onkeyup", "validateUserInput(this.id)");
                if(matrix == "matrix1"){
                  elementInput.setAttribute('class', 'element-input1');
                } else if(matrix == "matrix2"){
@@ -192,6 +193,17 @@ function resizeInputFields(id){
             }
             biggestCharLength = length;
         }
+    }
+}
+
+/** Validates that the values inputted by the user are numbers - todo fix validateUserInput */
+function validateUserInput(id){
+    console.log("validating user input"); // todo - REMOVE
+    var inputElement = document.getElementById(id);
+    var inputValue = inputElement.value;
+    console.log("input value = " + inputValue); // todo - REMOVE
+    if(isNaN(Number(inputValue))){
+        inputElement.value = inputValue.slice(0, inputValue.length - 1);
     }
 }
 
