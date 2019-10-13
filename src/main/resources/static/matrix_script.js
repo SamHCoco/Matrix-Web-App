@@ -90,7 +90,6 @@ function createMatrix(){
                elementInput.setAttribute("max", "9999999");
                elementInput.setAttribute("oninput", "resizeInputFields(this.id)");
                elementInput.setAttribute("onkeydown", "isInputInValidRange(this.id, event)");
-               elementInput.setAttribute("onkeyup", "validateUserInput(this.id)");
                if(matrix == "matrix1"){
                  elementInput.setAttribute('class', 'element-input1');
                } else if(matrix == "matrix2"){
@@ -121,6 +120,9 @@ function onSizeInputBlur(id){
 }
 
 /** Handles 'Enter' and 'del' keyboard buttons being pressed.
+    Deletes objects in display region when 'delete' button pressed.
+    Focuses matrix size input fields when enter pressed.
+    Generates matrix on pressing 'Enter', when both size input fields contain values.
  */
 addEventListener("keyup", function(event){
     if(event.key ==  "Delete"){
@@ -193,17 +195,6 @@ function resizeInputFields(id){
             }
             biggestCharLength = length;
         }
-    }
-}
-
-/** Validates that the values inputted by the user are numbers - todo fix validateUserInput */
-function validateUserInput(id){
-    console.log("validating user input"); // todo - REMOVE
-    var inputElement = document.getElementById(id);
-    var inputValue = inputElement.value;
-    console.log("input value = " + inputValue); // todo - REMOVE
-    if(isNaN(Number(inputValue))){
-        inputElement.value = inputValue.slice(0, inputValue.length - 1);
     }
 }
 
@@ -355,6 +346,7 @@ function deleteMatrix(){
         }
         if(matrix == "matrix3"){
             isMatrix3Created = false;
+            hideDisplayBreak(true);
             document.getElementById("equalsDisplay").innerHTML = "";
             disableButtons(false, ["goBtn"]);
         } else if(matrix == "matrix2"){
@@ -498,15 +490,26 @@ function isMultiplyValid(){
     }
 }
 
+/** Changes visibility of <hr> is matrix display region, pass true to hide hr,
+false otherwise */
+function hideDisplayBreak(boolean){
+    var displayHR = document.getElementById("displayBreak");
+    if(boolean == true){
+        displayHR.style.visibility = "hidden";
+        console.log("displayBreak now hidden"); // todo - REMOVE
+    } else {
+        displayHR.style.visibility = "visible";
+        console.log("displayBreak now visible"); // todo - REMOVE
+    }
+}
+
 /** Handles POST request when user clicks 'GO' button in client */
 $(function (){
     $("#goBtn").on("click", function(event){
-        // DEBUGGING
         console.log("GO! BUTTON CLICKED"); // todo - REMOVE
         disableButtons(true, ["goBtn"]);
         if(isMatrix1Created && isMatrix2Created && isOperatorSet || isMatrix1Created && operator == "det"){
             event.preventDefault();
-            console.log("Ajax() EXECUTED"); // todo - REMOVE
             var data = {
               operator : operator,
               matrix1Rows : oldMatrix[0],
@@ -525,17 +528,21 @@ $(function (){
                 for(var j = 1; j <= oldMatrix[2*i-2]; j++){
                     for(var k = 1; k <= oldMatrix[2*i-1]; k++){
                         var value = $("#matrix" + i + "e" + j + k).val();
-                        if(isNaN(parseInt(value))){
+                        var test = Number(value);
+                        console.log("Value: " + value); // todo - remove
+                        if(isNaN(test) || value == ""){
                             console.log("GO ERROR: '" + value + "' is not a number"); // todo - DELETE
                             disableButtons(false, ["goBtn"]);
                             return;
                         } else {
+                            console.log(value + " is valid"); // todo - remove
                             data["matrix" + i + "e" + j + k] = value;
                         }
                     }
                 }
                 i++;
             }
+            hideDisplayBreak(false);
             $.ajax({
               headers: {
                 "Accept": "application/json",
