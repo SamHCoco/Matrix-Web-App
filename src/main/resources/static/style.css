@@ -85,6 +85,10 @@ body {
     color: black;
 }
 
+.display-break{
+    visibility: hidden;
+}
+
 .result-display{
     display: inline-block;
     padding-left: 10px;
